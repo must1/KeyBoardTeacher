@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class ContentFileService implements ContentFileGetter {
+public class ContentFileRetrieverService implements ContentFileRetriever {
 
     @Override
     public Stream<String> getContentFile(String pathName) {

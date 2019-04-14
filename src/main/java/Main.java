@@ -1,5 +1,5 @@
 import conditionchecker.ConditionCheckerService;
-import contentfile.ContentFileService;
+import contentfile.ContentFileRetrieverService;
 
 public class Main {
 
@@ -7,9 +7,9 @@ public class Main {
 
         //C:\Users\Admin\IdeaProjects\KeyboardTeacher\tekst.txt
         ConditionCheckerService conditionCheckerService = new ConditionCheckerService();
-        ContentFileService contentFileService = new ContentFileService();
+        ContentFileRetrieverService contentFileRetrieverService = new ContentFileRetrieverService();
 
-        KeyBoardTeacherEngine keyBoardTeacherEngine = new KeyBoardTeacherEngine(contentFileService, conditionCheckerService);
+        KeyBoardTeacherEngine keyBoardTeacherEngine = new KeyBoardTeacherEngine(contentFileRetrieverService, conditionCheckerService);
         keyBoardTeacherEngine.startKeyBoardTeacherEngine();
     }
 }

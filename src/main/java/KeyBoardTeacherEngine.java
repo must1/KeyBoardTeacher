@@ -1,29 +1,30 @@
 import conditionchecker.ConditionChecker;
-import contentfile.ContentFileGetter;
+import contentfile.ContentFileRetriever;
 
 import java.util.Scanner;
 import java.util.stream.Stream;
 
 class KeyBoardTeacherEngine {
-    private ConditionChecker conditionChecker;
-    private ContentFileGetter contentFileGetter;
-    private Scanner scanner;
-    private boolean isTrue;
 
-    KeyBoardTeacherEngine(ContentFileGetter contentFileGetter, ConditionChecker conditionChecker) {
-        this.contentFileGetter = contentFileGetter;
+    private ConditionChecker conditionChecker;
+    private ContentFileRetriever contentFileRetriever;
+    private Scanner scanner;
+    private boolean isIteratedLineNotProper;
+
+    KeyBoardTeacherEngine(ContentFileRetriever contentFileRetriever, ConditionChecker conditionChecker) {
+        this.contentFileRetriever = contentFileRetriever;
         this.conditionChecker = conditionChecker;
         scanner = new Scanner(System.in);
     }
 
-     void startKeyBoardTeacherEngine() {
+    void startKeyBoardTeacherEngine() {
 
-        Stream<String> contentFileStream = contentFileGetter.getContentFile(getPath());
+        Stream<String> contentFileStream = contentFileRetriever.getContentFile(getPath());
         String[] contentFileArray = contentFileStream.toArray(String[]::new);
         String lineGivenByUser;
-
+        long startTime = System.nanoTime();
         for (int lineNumberOfFile = 0; lineNumberOfFile < contentFileArray.length; lineNumberOfFile++) {
-            isTrue = true;
+            isIteratedLineNotProper = true;
             do {
                 System.out.println(contentFileArray[lineNumberOfFile]);
                 lineGivenByUser = scanner.nextLine();
@@ -32,8 +33,12 @@ class KeyBoardTeacherEngine {
                 } else {
                     executeCaseWhenGivenLineHasLengthAsProper(lineGivenByUser, lineNumberOfFile, contentFileArray);
                 }
-            } while (isTrue);
+            } while (isIteratedLineNotProper);
         }
+
+        long endTime = System.nanoTime();
+        long durationTimeInSeconds = (endTime - startTime) / 1000000000; // we must divide the result in nanoseconds by 1000000000 to get result in seconds
+        System.out.println("Congratulations, you have completed it in: " + durationTimeInSeconds + " seconds.");
     }
 
     private String getPath() {
@@ -59,7 +64,7 @@ class KeyBoardTeacherEngine {
                 System.out.println("Bad character at " + index + " index.");
                 break;
             } else if (index + 1 == contentFileArray[lineNumberOfFile].length()) {
-                isTrue = false;
+                isIteratedLineNotProper = false;
                 break;
             }
         }
