@@ -8,15 +8,15 @@ import java.util.stream.Stream;
 public class ContentFileRetrieverService implements ContentFileRetriever {
 
     @Override
-    public Stream<String> getContentFile(String pathName) {
+    public String[] getContentFile(String pathName) {
 
-        Stream<String> contentFileStream = null;
+        Stream<String> contentFileStream;
         try {
             contentFileStream = Files.lines(Paths.get(pathName));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException(e);
         }
 
-        return contentFileStream;
+        return contentFileStream.toArray(String[]::new);
     }
 }
