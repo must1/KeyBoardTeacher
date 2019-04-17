@@ -1,6 +1,9 @@
 import conditionchecker.ConditionChecker;
 import contentfile.ContentFileRetriever;
+import rankingsystem.RankingSystemFacade;
+import view.GameMessages;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 class KeyBoardTeacherEngine {
@@ -8,50 +11,67 @@ class KeyBoardTeacherEngine {
     private static final int NANOSECONDS_IN_SECOND = 1000000000;
     private ConditionChecker conditionChecker;
     private ContentFileRetriever contentFileRetriever;
+    private GameMessages gameMessages;
+    private RankingSystemFacade rankingSystemFacade;
     private Scanner scanner;
-    private boolean isIteratedLineNotProper;
 
-    KeyBoardTeacherEngine(ContentFileRetriever contentFileRetriever, ConditionChecker conditionChecker) {
+
+    KeyBoardTeacherEngine(ContentFileRetriever contentFileRetriever, ConditionChecker conditionChecker,
+                          GameMessages gameMessages, RankingSystemFacade rankingSystemFacade) {
         this.contentFileRetriever = contentFileRetriever;
         this.conditionChecker = conditionChecker;
+        this.gameMessages = gameMessages;
+        this.rankingSystemFacade = rankingSystemFacade;
         scanner = new Scanner(System.in);
     }
 
     void startKeyBoardTeacherEngine() {
-
-        String[] contentFileArray = contentFileRetriever.getContentFile(getPath());
+        String name = getName();
+        String[] contentFileArray = contentFileRetriever.getContentFile(getPathFileOfGame());
         String lineGivenByUser;
         long startTime = System.nanoTime();
-        for (int lineNumberOfFile = 0; lineNumberOfFile < contentFileArray.length; lineNumberOfFile++) {
-            isIteratedLineNotProper = true;
+        for (String modelLine : contentFileArray) {
             do {
-                System.out.println(contentFileArray[lineNumberOfFile]);
+                System.out.println(modelLine);
                 lineGivenByUser = scanner.nextLine();
-                for (int index = 0; index < lineGivenByUser.length(); index++) {
-                    if (conditionChecker.checkIfTwoCharactersAreUnequal(lineNumberOfFile, lineGivenByUser, contentFileArray, index)) {
-                        System.out.println("Bad character at " + index + " index.");
+
+                if (modelLine.equals(lineGivenByUser)) {
+                    break;
+                }
+
+                for (int index = 0; index < modelLine.length(); index++) {
+                    int lineNumber = Arrays.asList(contentFileArray).indexOf(modelLine);
+
+                    if (conditionChecker.checkIfCharactersAreUnequal(modelLine.charAt(index), lineGivenByUser.charAt(index))) {
+                        gameMessages.executeBadIndexMessage(index);
                         break;
-                    } else if ((lineGivenByUser.length() < contentFileArray[lineNumberOfFile].length())) {
+                    } else if ((lineGivenByUser.length() < contentFileArray[lineNumber].length())) {
                         if (conditionChecker.checkIfIndexEqualsToLengthOfLineGivenByUser(index, lineGivenByUser)) {
+                            gameMessages.executeMessageOfCaseWhenGivenLineIsShorterThanProper(lineGivenByUser);
                             break;
                         }
-                    } else if ((lineGivenByUser.length() == contentFileArray[lineNumberOfFile].length())) {
-                        if (conditionChecker.checkIfIndexEqualsToLengthOfProperLine(index, lineNumberOfFile, contentFileArray)) {
-                            isIteratedLineNotProper = false;
-                            break;
-                        }
+                    } else if ((lineGivenByUser.length() > contentFileArray[lineNumber].length())) {
+                        gameMessages.executeMessageOfCaseWhenGivenLineIsLongerThanProper();
+                        break;
                     }
                 }
-            } while (isIteratedLineNotProper);
+            }
+            while (true);
         }
 
         long endTime = System.nanoTime();
         long durationTimeInSeconds = (endTime - startTime) / NANOSECONDS_IN_SECOND;
-        System.out.println("Congratulations, you have completed it in: " + durationTimeInSeconds + " seconds.");
+        rankingSystemFacade.executeRankingSystemProcess(name, durationTimeInSeconds);
+        gameMessages.executeCongratulationsAboutEndingGame(durationTimeInSeconds, name);
     }
 
-    private String getPath() {
-        System.out.println("Provide path of the file(if the file is in the project folder, then just write a name of the file)");
+    private String getPathFileOfGame() {
+        gameMessages.executeGettingPathMessage();
+        return scanner.nextLine();
+    }
+
+    private String getName() {
+        gameMessages.askAboutName();
         return scanner.nextLine();
     }
 }
