@@ -15,7 +15,7 @@ public class KeyBoardTeacherView implements GameMessages {
     @Override
     public void executeGettingContentPathMessage() {
         System.out.println("Provide path of the file in which we can find text for the game(if the file is in the project" +
-                " folder, then just write a name of the file)");
+                " folder, then just write a name of the file) i.e tekst.txt");
     }
 
     @Override
@@ -40,6 +40,7 @@ public class KeyBoardTeacherView implements GameMessages {
 
     @Override
     public void executeGettingRankingFilePathMessage() {
-        System.out.println("Provide path of the ranking file(if the file is in the project folder, then just write a name of the file)");
+        System.out.println("Provide path of the ranking file(if the file is in the project folder, " +
+                "then just write a name of the file) i.e ranking.txt");
     }
 }

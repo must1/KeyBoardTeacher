@@ -39,17 +39,17 @@ class KeyBoardTeacherEngine {
                 }
 
                 for (int index = 0; index < modelLine.length(); index++) {
-                    int lineNumber = Arrays.asList(contentFileArray).indexOf(modelLine);
+                    int modelLineNumber = Arrays.asList(contentFileArray).indexOf(modelLine);
 
                     if (conditionChecker.checkIfCharactersAreUnequal(modelLine.charAt(index), lineGivenByUser.charAt(index))) {
                         gameMessages.executeBadIndexMessage(index);
                         break;
-                    } else if ((lineGivenByUser.length() < contentFileArray[lineNumber].length())) {
+                    } else if ((lineGivenByUser.length() < contentFileArray[modelLineNumber].length())) {
                         if (conditionChecker.checkIfIndexEqualsToLengthOfLineGivenByUser(index, lineGivenByUser)) {
                             gameMessages.executeMessageOfCaseWhenGivenLineIsShorterThanProper(lineGivenByUser);
                             break;
                         }
-                    } else if ((lineGivenByUser.length() > contentFileArray[lineNumber].length())) {
+                    } else if ((lineGivenByUser.length() > contentFileArray[modelLineNumber].length())) {
                         gameMessages.executeMessageOfCaseWhenGivenLineIsLongerThanProper();
                         break;
                     }
