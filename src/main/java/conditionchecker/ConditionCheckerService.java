@@ -3,10 +3,7 @@ package conditionchecker;
 public class ConditionCheckerService implements ConditionChecker {
     @Override
     public boolean checkIfCharactersAreUnequal(char firstCharacter, char secondCharacter) {
-        if (firstCharacter == secondCharacter)
-            return false;
-        else
-            return true;
+        return firstCharacter != secondCharacter;
     }
 
     //if index+1 equals to length of line given by user (which is shorter than proper),

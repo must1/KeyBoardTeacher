@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class RankingSystemService {
 
-    public static final int FIRST_PART = 0;
-    public static final int SECOND_PART = 1;
+    private static final int FIRST_PART = 0;
+    private static final int SECOND_PART = 1;
     private ContentFileRetriever contentFileRetriever;
 
     public RankingSystemService(ContentFileRetriever contentFileRetriever) {
@@ -22,7 +22,7 @@ public class RankingSystemService {
         return new ArrayList<>(sortedRankingArray.keySet()).indexOf(name);
     }
 
-    Map<String, Long> getLinkedHashMappedRankingArray(String[] rankingArray) {
+    Map<String, Long> getSortedLinkedHashMappedRankingArray(String[] rankingArray) {
         return Arrays
                 .stream(rankingArray)
                 .map(it -> it.split("\\s+"))
@@ -34,13 +34,13 @@ public class RankingSystemService {
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
-    String[] retrieveRankingData() {
-        return contentFileRetriever.getContentFile((getPathOfRankingFile()));
+    String[] retrieveRankingData(String rankingPathFile) {
+        return contentFileRetriever.getContent(rankingPathFile);
     }
 
-    void overwriteFileWithGivenResult(String name, long timeOfFinishingGame) {
+    void overwriteFileWithGivenResult(String name, long timeOfFinishingGame, String rankingPathFile) {
 
-        try (FileWriter writer = new FileWriter(getPathOfRankingFile(), true);
+        try (FileWriter writer = new FileWriter(rankingPathFile, true);
              BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
             bufferedWriter.write(name + " " + timeOfFinishingGame);
             bufferedWriter.newLine();
@@ -48,9 +48,4 @@ public class RankingSystemService {
             e.printStackTrace();
         }
     }
-
-    private String getPathOfRankingFile() {
-        return "ranking.txt";
-    }
-
 }

@@ -15,7 +15,6 @@ class KeyBoardTeacherEngine {
     private RankingSystemFacade rankingSystemFacade;
     private Scanner scanner;
 
-
     KeyBoardTeacherEngine(ContentFileRetriever contentFileRetriever, ConditionChecker conditionChecker,
                           GameMessages gameMessages, RankingSystemFacade rankingSystemFacade) {
         this.contentFileRetriever = contentFileRetriever;
@@ -27,7 +26,7 @@ class KeyBoardTeacherEngine {
 
     void startKeyBoardTeacherEngine() {
         String name = getName();
-        String[] contentFileArray = contentFileRetriever.getContentFile(getPathFileOfGame());
+        String[] contentFileArray = contentFileRetriever.getContent(getPathFileOfGame());
         String lineGivenByUser;
         long startTime = System.nanoTime();
         for (String modelLine : contentFileArray) {
@@ -66,7 +65,7 @@ class KeyBoardTeacherEngine {
     }
 
     private String getPathFileOfGame() {
-        gameMessages.executeGettingPathMessage();
+        gameMessages.executeGettingContentPathMessage();
         return scanner.nextLine();
     }
 
